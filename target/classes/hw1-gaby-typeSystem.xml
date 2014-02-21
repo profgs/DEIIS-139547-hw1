@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<typeSystemDescription xmlns="http://uima.apache.org/resourceSpecifier">
+    <name>hw1-gaby-typeSystem</name>
+    <description>The objective of this first homework is to create a logical data model for a sample information processing task. The task consists in retrieving a question (in the form of text) and classifying a series of answers according to this specific query. The answers can be correct or incorrect, and the system should be able to asses them in this manner. A Type System model in UIMA (Unstructured Information Management Architecture) is required (implemented and designed).&#13;</description>
+    <version>1.0</version>
+    <vendor/>
+  <types>
+    <typeDescription>
+      <name>hw1.types.Answer</name>
+      <description>The answers originate, from an input text file and will have the following format:&#13;&lt;Identifier&gt;&lt;isCorrect&gt;&lt;AnswerText&gt;&#13;	Identifier = String, length=1, (specifically the letter “A”). &#13;	isCorrect = Int, either a 1 or a 0.&#13;	AnswerText = String { A...Z | a...z | 0...9 | “,” | “´”, ...  }&#13;</description>
+      <supertypeName>hw1.types.Sentence</supertypeName>
+    <features>
+        <featureDescription>
+          <name>isCorrect</name>
+          <description>Score given to the answer in order to know if it correct. Possible values: 0 or 1.</description>
+          <rangeTypeName>uima.cas.Integer</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>sentencesText</name>
+          <description>Will contain the tokens derived from each sentence that represents an answer.</description>
+          <rangeTypeName>hw1.types.Token</rangeTypeName>
+        </featureDescription>
+      </features>
+    </typeDescription>
+    <typeDescription>
+      <name>hw1.types.Questions</name>
+      <description>The question comes from an input text file, which will have the following format:&#13;&lt;Identifier&gt;  &lt; QuestionText &gt;&#13;Identifier = String, length=1, (specifically the letter “Q”). 
+QuestionText = String { A...Z | a...z | 0...9 | “,” | “´”, ...  }&#13;</description>
+      <supertypeName>hw1.types.Sentence</supertypeName>
+    <features>
+        <featureDescription>
+          <name>sentenceText</name>
+          <description>Senteces corresponding to the question being asked.</description>
+          <rangeTypeName>uima.cas.StringArray</rangeTypeName>
+        </featureDescription>
+      </features>
+    </typeDescription>
+    <typeDescription>
+      <name>hw1.types.NGram</name>
+      <description>The system will annotate 1-, 2- and 3-grams of consecutive tokens. </description>
+      <supertypeName>uima.cas.AnnotationBase</supertypeName>
+    <features>
+        <featureDescription>
+          <name>SizeN</name>
+          <description>Size of the NGram. N can be 1, 2 or 3.</description>
+          <rangeTypeName>uima.cas.Integer</rangeTypeName>
+        </featureDescription>
+      </features>
+    </typeDescription>
+    <typeDescription>
+      <name>hw1.types.Results</name>
+      <description>Will sort the answers according to their scores, and calculate precision at N (where N is the total number of correct answers).</description>
+      <supertypeName>uima.cas.AnnotationBase</supertypeName>
+      <features>
+        <featureDescription>
+          <name>precision</name>
+          <description>Measures the presicion @ N</description>
+          <rangeTypeName>uima.cas.Double</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>sizeN</name>
+          <description>Takes the value of N, at which precision will be calculated.</description>
+          <rangeTypeName>uima.cas.Integer</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>ordListAnswers</name>
+          <description>Will list the answers in order according to presicion @ N calculation.</description>
+          <rangeTypeName>uima.cas.FSList</rangeTypeName>
+          <elementType>hw1.types.Answer</elementType>
+          <multipleReferencesAllowed>true</multipleReferencesAllowed>
+        </featureDescription>
+      </features>
+    </typeDescription>
+  <typeDescription>
+      <name>hw1.types.Sentence</name>
+      <description>This annotation represents the general view of the problem, a sentence, from which a question or answer can derive. &#13;</description>
+      <supertypeName>uima.cas.AnnotationBase</supertypeName>
+    <features>
+        <featureDescription>
+          <name>sentenceText</name>
+          <description>Contains the raw sentences taken from the input text file.</description>
+          <rangeTypeName>uima.cas.StringArray</rangeTypeName>
+          <multipleReferencesAllowed>true</multipleReferencesAllowed>
+        </featureDescription>
+      </features>
+    </typeDescription>
+  <typeDescription>
+      <name>hw1.types.Token</name>
+      <description>Each sentence will be divided into several tokens. We need to save where the token begins and ends, plus the total number of tokens.</description>
+      <supertypeName>uima.cas.AnnotationBase</supertypeName>
+      <features>
+        <featureDescription>
+          <name>endTokenPosition</name>
+          <description>Indicate the position where the Token ends</description>
+          <rangeTypeName>uima.cas.Integer</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>beginTokenPostion</name>
+          <description>Indicate the position where the Token begins.</description>
+          <rangeTypeName>uima.cas.Integer</rangeTypeName>
+        </featureDescription>
+      </features>
+    </typeDescription>
+  </types>
+</typeSystemDescription>
